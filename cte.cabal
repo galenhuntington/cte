@@ -1,0 +1,64 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 9d3aa4dca736821c85933737132207dd4e6ce658bd061aa5f6a6cbbc7ac8b5df
+
+name:           cte
+version:        0.5.0
+synopsis:       Utility functions for working with CTE — Common Equiform Time.
+category:       Time
+homepage:       https://galen.xyz/cte/
+maintainer:     Galen Huntington
+license:        AllRightsReserved
+build-type:     Simple
+
+library
+  exposed-modules:
+      CTE.Date
+      CTE.Moment
+      CTE.Struct
+  other-modules:
+      Paths_cte
+  hs-source-dirs:
+      ./.
+  default-extensions: ApplicativeDo BangPatterns BinaryLiterals BlockArguments ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies DerivingVia EmptyCase EmptyDataDeriving ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTSyntax GeneralizedNewtypeDeriving InstanceSigs LambdaCase MultiWayIf NamedFieldPuns NoImplicitPrelude NondecreasingIndentation NoStarIsType NumDecimals NumericUnderscores OverloadedLabels PatternGuards PatternSynonyms QuantifiedConstraints QuasiQuotes RankNTypes RecordWildCards RoleAnnotations ScopedTypeVariables StandaloneDeriving TupleSections TypeApplications TypeFamilies TypeFamilyDependencies TypeOperators UnicodeSyntax ViewPatterns OverloadedStrings
+  ghc-options: -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-missing-signatures -Wno-unused-do-bind -Wno-orphans -Wcompat -Wmissing-deriving-strategies -pgmF hpre -F
+  build-tool-depends:
+      hpre:hpre ==1.*
+  build-depends:
+      base
+    , base-prelude
+    , clock
+    , containers
+    , extended-reals
+    , linear
+    , optparse-applicative
+    , time
+  default-language: Haskell2010
+
+executable gdate
+  main-is: gdate.hs
+  other-modules:
+      CTE.Date
+      CTE.Moment
+      CTE.Struct
+      Paths_cte
+  hs-source-dirs:
+      ./.
+  default-extensions: ApplicativeDo BangPatterns BinaryLiterals BlockArguments ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies DerivingVia EmptyCase EmptyDataDeriving ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTSyntax GeneralizedNewtypeDeriving InstanceSigs LambdaCase MultiWayIf NamedFieldPuns NoImplicitPrelude NondecreasingIndentation NoStarIsType NumDecimals NumericUnderscores OverloadedLabels PatternGuards PatternSynonyms QuantifiedConstraints QuasiQuotes RankNTypes RecordWildCards RoleAnnotations ScopedTypeVariables StandaloneDeriving TupleSections TypeApplications TypeFamilies TypeFamilyDependencies TypeOperators UnicodeSyntax ViewPatterns OverloadedStrings
+  ghc-options: -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-missing-signatures -Wno-unused-do-bind -Wno-orphans -Wcompat -Wmissing-deriving-strategies -pgmF hpre -F
+  build-tool-depends:
+      hpre:hpre ==1.*
+  build-depends:
+      base
+    , base-prelude
+    , clock
+    , containers
+    , extended-reals
+    , linear
+    , optparse-applicative
+    , time
+  default-language: Haskell2010
