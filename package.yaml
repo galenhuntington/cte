@@ -1,0 +1,33 @@
+name: cte
+version: 0.5.0
+synopsis: Utility functions for working with CTE — Common Equiform Time.
+category: Time
+homepage: https://galen.xyz/cte/
+maintainer: Galen Huntington
+license: AllRightsReserved
+
+defaults: galenhuntington/hpack-defaults@3f7a96145b925acc35dc16acf7775da9f6a54e25
+
+source-dirs:
+   - .
+
+default-extensions:
+   - OverloadedStrings
+
+library: {}
+
+executables:
+   # still keeping this old thing
+   gdate:
+      main: gdate.hs
+
+dependencies:
+   - base
+   - base-prelude
+   - extended-reals
+   - time
+   - clock
+   - optparse-applicative
+   - linear
+   # - QuickCheck
+
