@@ -27,7 +27,6 @@ pattern Duration :: Rational -> Duration
 pattern Duration α = GenDuration α
 {-# COMPLETE Duration #-}
 
---  TODO use Parts!
 instance Show Duration where
    show dur =
       case signum (toYears dur) of
