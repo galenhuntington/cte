@@ -1,8 +1,8 @@
-resolver: lts-15.12
+resolver: lts-15.13
 system-ghc: true
 compiler-check: newer-minor
 
 extra-deps:
    - git: git@github.com:galenhuntington/hpre
-     commit: 0d1d6fec9c234790b2339829168624db84bd2b00
+     commit: cde56f22de0730c99d60bbdc6a0c13e75c509eac
 
