@@ -4,7 +4,7 @@ synopsis: Utility functions for working with CTE — Common Equiform Time.
 category: Time
 homepage: https://galen.xyz/cte/
 maintainer: Galen Huntington
-license: AllRightsReserved
+license: MIT
 
 defaults: galenhuntington/hpack-defaults@3f7a96145b925acc35dc16acf7775da9f6a54e25
 
