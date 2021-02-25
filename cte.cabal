@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9d3aa4dca736821c85933737132207dd4e6ce658bd061aa5f6a6cbbc7ac8b5df
+-- hash: 46bb0e9c5d9573ee4ee80a751e15b8c18250a04354b8a743a91398a0ebe51b1b
 
 name:           cte
 version:        0.5.0
@@ -12,7 +12,8 @@ synopsis:       Utility functions for working with CTE — Common Equiform Time.
 category:       Time
 homepage:       https://galen.xyz/cte/
 maintainer:     Galen Huntington
-license:        AllRightsReserved
+license:        MIT
+license-file:   LICENSE
 build-type:     Simple
 
 library
