@@ -1,13 +1,13 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 46bb0e9c5d9573ee4ee80a751e15b8c18250a04354b8a743a91398a0ebe51b1b
+-- hash: 76971dfee07d2a2304d30b486f88cbb4581511d2bec344f8fd388b8fbc5e7f64
 
 name:           cte
-version:        0.5.0
+version:        0.5.1
 synopsis:       Utility functions for working with CTE — Common Equiform Time.
 category:       Time
 homepage:       https://galen.xyz/cte/
@@ -15,6 +15,11 @@ maintainer:     Galen Huntington
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
+
+flag linear
+  description: Depend on linear package, to make its instances available.
+  manual: True
+  default: False
 
 library
   exposed-modules:
@@ -24,8 +29,57 @@ library
   other-modules:
       Paths_cte
   hs-source-dirs:
-      ./.
-  default-extensions: ApplicativeDo BangPatterns BinaryLiterals BlockArguments ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies DerivingVia EmptyCase EmptyDataDeriving ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTSyntax GeneralizedNewtypeDeriving InstanceSigs LambdaCase MultiWayIf NamedFieldPuns NoImplicitPrelude NondecreasingIndentation NoStarIsType NumDecimals NumericUnderscores OverloadedLabels PatternGuards PatternSynonyms QuantifiedConstraints QuasiQuotes RankNTypes RecordWildCards RoleAnnotations ScopedTypeVariables StandaloneDeriving TupleSections TypeApplications TypeFamilies TypeFamilyDependencies TypeOperators UnicodeSyntax ViewPatterns OverloadedStrings
+      ./
+  default-extensions:
+      ApplicativeDo
+      BangPatterns
+      BinaryLiterals
+      BlockArguments
+      ConstraintKinds
+      DataKinds
+      DefaultSignatures
+      DeriveAnyClass
+      DeriveDataTypeable
+      DeriveGeneric
+      DeriveLift
+      DeriveTraversable
+      DerivingStrategies
+      DerivingVia
+      EmptyCase
+      EmptyDataDeriving
+      ExistentialQuantification
+      FlexibleContexts
+      FlexibleInstances
+      FunctionalDependencies
+      GADTSyntax
+      GeneralizedNewtypeDeriving
+      InstanceSigs
+      LambdaCase
+      MultiWayIf
+      NamedFieldPuns
+      NoImplicitPrelude
+      NondecreasingIndentation
+      NoStarIsType
+      NumDecimals
+      NumericUnderscores
+      OverloadedLabels
+      PatternGuards
+      PatternSynonyms
+      QuantifiedConstraints
+      QuasiQuotes
+      RankNTypes
+      RecordWildCards
+      RoleAnnotations
+      ScopedTypeVariables
+      StandaloneDeriving
+      TupleSections
+      TypeApplications
+      TypeFamilies
+      TypeFamilyDependencies
+      TypeOperators
+      UnicodeSyntax
+      ViewPatterns
+      OverloadedStrings
   ghc-options: -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-missing-signatures -Wno-unused-do-bind -Wno-orphans -Wcompat -Wmissing-deriving-strategies -pgmF hpre -F
   build-tool-depends:
       hpre:hpre ==1.*
@@ -35,9 +89,12 @@ library
     , clock
     , containers
     , extended-reals
-    , linear
     , optparse-applicative
     , time
+    , torsor
+  if flag(linear)
+    build-depends:
+        linear
   default-language: Haskell2010
 
 executable gdate
@@ -48,8 +105,57 @@ executable gdate
       CTE.Struct
       Paths_cte
   hs-source-dirs:
-      ./.
-  default-extensions: ApplicativeDo BangPatterns BinaryLiterals BlockArguments ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies DerivingVia EmptyCase EmptyDataDeriving ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTSyntax GeneralizedNewtypeDeriving InstanceSigs LambdaCase MultiWayIf NamedFieldPuns NoImplicitPrelude NondecreasingIndentation NoStarIsType NumDecimals NumericUnderscores OverloadedLabels PatternGuards PatternSynonyms QuantifiedConstraints QuasiQuotes RankNTypes RecordWildCards RoleAnnotations ScopedTypeVariables StandaloneDeriving TupleSections TypeApplications TypeFamilies TypeFamilyDependencies TypeOperators UnicodeSyntax ViewPatterns OverloadedStrings
+      ./
+  default-extensions:
+      ApplicativeDo
+      BangPatterns
+      BinaryLiterals
+      BlockArguments
+      ConstraintKinds
+      DataKinds
+      DefaultSignatures
+      DeriveAnyClass
+      DeriveDataTypeable
+      DeriveGeneric
+      DeriveLift
+      DeriveTraversable
+      DerivingStrategies
+      DerivingVia
+      EmptyCase
+      EmptyDataDeriving
+      ExistentialQuantification
+      FlexibleContexts
+      FlexibleInstances
+      FunctionalDependencies
+      GADTSyntax
+      GeneralizedNewtypeDeriving
+      InstanceSigs
+      LambdaCase
+      MultiWayIf
+      NamedFieldPuns
+      NoImplicitPrelude
+      NondecreasingIndentation
+      NoStarIsType
+      NumDecimals
+      NumericUnderscores
+      OverloadedLabels
+      PatternGuards
+      PatternSynonyms
+      QuantifiedConstraints
+      QuasiQuotes
+      RankNTypes
+      RecordWildCards
+      RoleAnnotations
+      ScopedTypeVariables
+      StandaloneDeriving
+      TupleSections
+      TypeApplications
+      TypeFamilies
+      TypeFamilyDependencies
+      TypeOperators
+      UnicodeSyntax
+      ViewPatterns
+      OverloadedStrings
   ghc-options: -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-missing-signatures -Wno-unused-do-bind -Wno-orphans -Wcompat -Wmissing-deriving-strategies -pgmF hpre -F
   build-tool-depends:
       hpre:hpre ==1.*
@@ -59,7 +165,10 @@ executable gdate
     , clock
     , containers
     , extended-reals
-    , linear
     , optparse-applicative
     , time
+    , torsor
+  if flag(linear)
+    build-depends:
+        linear
   default-language: Haskell2010

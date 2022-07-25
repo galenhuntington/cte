@@ -9,25 +9,36 @@ license: MIT
 defaults: galenhuntington/hpack-defaults@3f7a96145b925acc35dc16acf7775da9f6a54e25
 
 source-dirs:
-   - .
+- .
 
 default-extensions:
-   - OverloadedStrings
+- OverloadedStrings
 
 library: {}
 
 executables:
-   # still keeping this old thing
-   gdate:
-      main: gdate.hs
+  # still keeping this old thing
+  gdate:
+    main: gdate.hs
+
+flags:
+  linear:
+    description: Depend on linear package, to make its instances available.
+    default: false
+    manual: true
+
+when:
+- condition: flag(linear)
+  dependencies:
+    - linear
 
 dependencies:
-   - base
-   - base-prelude
-   - extended-reals
-   - time
-   - clock
-   - optparse-applicative
-   - linear
-   # - QuickCheck
+- base
+- base-prelude
+- extended-reals
+- time
+- clock
+- optparse-applicative
+- torsor
+# - QuickCheck
 

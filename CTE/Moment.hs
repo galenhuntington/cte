@@ -1,27 +1,65 @@
-{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE UndecidableInstances, CPP #-}
 
 module CTE.Moment (module CTE.Moment, CTE.Parts(..), module X) where
+
+-- #undef MIN_VERSION_linear
 
 --+
 import BasePrelude
 import Data.Time
 import System.Clock
-import Linear.Vector, as X
+import Torsor hiding (zero), as To, as X
+#ifdef MIN_VERSION_linear
+import Linear.Vector hiding (Additive), as Linear, as X
 import Linear.Affine, as X hiding (P)
+#endif
 -- import Test.QuickCheck
 
 import CTE.Struct as CTE
 
 
 class Linear f where (^/^) :: Fractional ν => f ν -> f ν -> ν
+
 instance Linear Identity where
    Identity x ^/^ Identity y = x/y
 
+#ifndef MIN_VERSION_linear
+-- mimic linear
+newtype Point f a = P (f a)  -- TODO hide P and maybe Point?
+   deriving newtype (Eq, Ord)
+s *^ v = scale s v
+v ^* s = scale s v
+x ^/ y = recip y *^ x
+infixl 7 *^, ^/
+p .+^ v = add v p
+x .-^ y = x .+^ invert y
+p1 .-. p2 = difference p1 p2
+v1 ^+^ v2 = plus v1 v2
+v1 ^-^ v2 = minus v1 v2
+infixl 6 .+^, .-^, .-.
+zero :: Additive α => α
+''  = To.zero
+#endif
+
+--  Orphan instance; should be in Torsor.
+instance Additive Rational where
+   zero = 0; plus = (+); minus = (-); invert = negate
+
+instance Additive (f a) => Torsor (Point f a) (f a) where
+   add w (P v) = P (w `plus` v)
+   difference (P v) (P w) = (v `minus` w)
+
 --  A duration is an arbitrary precision rational counting CTE years.
 newtype GenDuration α = GenDuration { toYears :: α }
-   deriving (Functor, Additive, Linear) via Identity
-   deriving newtype (Eq, Ord)
-   -- deriving newtype Arbitrary
+   deriving (Functor, Linear) via Identity
+   deriving newtype (Eq, Ord, Additive)
+#ifdef MIN_VERSION_linear
+   deriving Linear.Additive via Identity
+#endif
+
+instance (Num α, Additive α) => Scaling (GenDuration α) α where
+   scale s (GenDuration a) = GenDuration (s * a)
+
 type Duration = GenDuration Rational
 pattern Duration :: Rational -> Duration
 pattern Duration α = GenDuration α
@@ -84,8 +122,8 @@ cteTierce :: Duration = cteSecond ^/ 60
 
 cteSiRatio :: Rational = 46080 % 46751
 siSecond :: Duration = cteSiRatio *^ cteSecond
-siHour :: Duration = siSecond ^* 3600
-siDay :: Duration = siHour ^* 24
+siHour :: Duration = 3600 *^ siSecond
+siDay :: Duration = 24 *^ siHour
 
 cteEpoch :: Moment = Moment (Duration 0)
 
