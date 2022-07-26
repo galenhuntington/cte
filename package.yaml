@@ -40,5 +40,6 @@ dependencies:
 - clock
 - optparse-applicative
 - torsor
+- vector-space
 # - QuickCheck
 

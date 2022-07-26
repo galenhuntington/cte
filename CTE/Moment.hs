@@ -2,16 +2,19 @@
 
 module CTE.Moment (module CTE.Moment, CTE.Parts(..), module X) where
 
--- #undef MIN_VERSION_linear
-
 --+
 import BasePrelude
 import Data.Time
 import System.Clock
-import Torsor hiding (zero), as To, as X
+import Torsor
+import Data.AffineSpace, as X (alerp)
+import Data.VectorSpace
 #ifdef MIN_VERSION_linear
-import Linear.Vector hiding (Additive), as Linear, as X
-import Linear.Affine, as X hiding (P)
+import Linear.Vector as Linear
+import Linear.Affine (Point(..))
+#else
+import Data.AffineSpace as X ((.+^), (.-^), (.-.))
+import Data.VectorSpace as X ((^*), (*^), (^/), (^+^), (^-^))
 #endif
 -- import Test.QuickCheck
 
@@ -21,25 +24,16 @@ import CTE.Struct as CTE
 class Linear f where (^/^) :: Fractional ν => f ν -> f ν -> ν
 
 instance Linear Identity where
-   Identity x ^/^ Identity y = x/y
+   Identity x ^/^ Identity y = x / y
 
 #ifndef MIN_VERSION_linear
--- mimic linear
-newtype Point f a = P (f a)  -- TODO hide P and maybe Point?
+-- mimic linear (except P not hidden)
+newtype Point f a = P (f a)
    deriving newtype (Eq, Ord)
-s *^ v = scale s v
-v ^* s = scale s v
-x ^/ y = recip y *^ x
-infixl 7 *^, ^/
-p .+^ v = add v p
-x .-^ y = x .+^ invert y
-p1 .-. p2 = difference p1 p2
-v1 ^+^ v2 = plus v1 v2
-v1 ^-^ v2 = minus v1 v2
-infixl 6 .+^, .-^, .-.
-zero :: Additive α => α
-''  = To.zero
 #endif
+
+
+--  Torsor stuff.
 
 --  Orphan instance; should be in Torsor.
 instance Additive Rational where
@@ -49,9 +43,28 @@ instance Additive (f a) => Torsor (Point f a) (f a) where
    add w (P v) = P (w `plus` v)
    difference (P v) (P w) = (v `minus` w)
 
+
+--  Vector space stuff (very orphany).
+
+instance Num α => AdditiveGroup (Identity α) where
+   zeroV = pure 0
+   (^+^) = liftA2 (+)
+   negateV = liftA negate
+
+instance AdditiveGroup (φ β) => AffineSpace (Point φ β) where
+   type Diff (Point φ β) = φ β
+   P x .+^ y = P $ x ^+^ y
+   P x .-. P y = x ^-^ y
+
+instance Num β => VectorSpace (Identity β) where
+   type Scalar (Identity β) = β
+   x *^ Identity y = Identity (x * y)
+
+
 --  A duration is an arbitrary precision rational counting CTE years.
 newtype GenDuration α = GenDuration { toYears :: α }
-   deriving (Functor, Linear) via Identity
+   deriving (Functor, Linear, Applicative) via Identity
+   deriving (AdditiveGroup, VectorSpace) via Identity α
    deriving newtype (Eq, Ord, Additive)
 #ifdef MIN_VERSION_linear
    deriving Linear.Additive via Identity
@@ -64,6 +77,14 @@ type Duration = GenDuration Rational
 pattern Duration :: Rational -> Duration
 pattern Duration α = GenDuration α
 {-# COMPLETE Duration #-}
+
+--  The CTE epoch is 2000-01-01 0h CTE/TT.
+--  A moment is a duration in CTE years since then (possibly negative).
+type GenMoment = Point GenDuration
+type Moment = GenMoment Rational
+pattern Moment :: Duration -> Moment
+pattern Moment α = P α
+{-# COMPLETE Moment #-}
 
 instance Show Duration where
    show dur =
@@ -84,26 +105,6 @@ instance Show Duration where
                , (ψ year, 'y'), (ψ month, 'l'), (ψ day, 'd')
                , (ψ hours, 'h'), (ψ minutes, 'm'), (ψ seconds, 's'), (ψ tierce, 't')]
       ψ x = (x > 0, show x)
-
-
--- newtype Torsor φ = Torsor φ
--- instance Additive φ => Affine (Torsor φ) where
-
---  The CTE epoch is 2000-01-01 0h CTE/TT.
---  A moment is a duration in CTE years since then (possibly negative).
-{-
-newtype GenMoment α = Moment { getInterval :: GenDuration α }
-   deriving Affine via Point GenDuration
-   deriving newtype (Eq, Ord {-, Num, Fractional, RealFrac, Real -})
--}
--- trying something diff, using Point directly
-type GenMoment = Point GenDuration
-type Moment = GenMoment Rational
-pattern Moment :: Duration -> Moment
-pattern Moment α = P α
-{-# COMPLETE Moment #-}
-
--- deriving newtype instance Arbitrary (α β) => Arbitrary (Point α β)
 
 instance {-# OVERLAPPING #-} Show Moment where
    show mom =

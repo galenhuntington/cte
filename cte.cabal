@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 76971dfee07d2a2304d30b486f88cbb4581511d2bec344f8fd388b8fbc5e7f64
+-- hash: 12c4bcdbaa81fb53de1b59e4b9c3c42c13fa3ab7187b79ff7ee874b536ab4f13
 
 name:           cte
 version:        0.5.1
@@ -92,6 +92,7 @@ library
     , optparse-applicative
     , time
     , torsor
+    , vector-space
   if flag(linear)
     build-depends:
         linear
@@ -168,6 +169,7 @@ executable gdate
     , optparse-applicative
     , time
     , torsor
+    , vector-space
   if flag(linear)
     build-depends:
         linear
