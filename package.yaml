@@ -1,5 +1,5 @@
 name: cte
-version: 0.5.1
+version: 0.6.0
 synopsis: Utility functions for working with CTE — Common Equiform Time.
 category: Time
 homepage: https://galen.xyz/cte/
@@ -23,7 +23,11 @@ executables:
 
 flags:
   linear:
-    description: Depend on linear package, to make its instances available.
+    description: Depend on linear package, to make its instances available; also adds orphan instances.  Since exports conflict with vector-space, none of the operators will be re-exported.
+    default: false
+    manual: true
+  torsor:
+    description: Include torsor dependency and instances (one orphan instance needed).
     default: false
     manual: true
 
@@ -31,6 +35,9 @@ when:
 - condition: flag(linear)
   dependencies:
     - linear
+- condition: flag(torsor)
+  dependencies:
+    - torsor
 
 dependencies:
 - base
@@ -39,7 +46,6 @@ dependencies:
 - time
 - clock
 - optparse-applicative
-- torsor
 - vector-space
 # - QuickCheck
 

@@ -39,7 +39,7 @@ instance Read Date where
          _ -> []
       where
          f (l, x) = case reads x of
-            [(a, b)] -> (a : l, case b of '-':x -> x; '/':x -> x; x -> x)
+            [(a, b)] -> (a : l, case b of '-':y -> y; '/':y -> y; y -> y)
             _ -> ([], "")
 
 --  The argument is a Julian day to start Gregorian on.

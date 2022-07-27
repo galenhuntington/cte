@@ -3,15 +3,18 @@
 module CTE.Moment (module CTE.Moment, CTE.Parts(..), module X) where
 
 --+
-import BasePrelude
+import BasePrelude hiding (loop)
 import Data.Time
 import System.Clock
-import Torsor
 import Data.AffineSpace, as X (alerp)
 import Data.VectorSpace
+#ifdef MIN_VERSION_torsor
+import Torsor
+#endif
 #ifdef MIN_VERSION_linear
 import Linear.Vector as Linear
 import Linear.Affine (Point(..))
+import Linear.V1
 #else
 import Data.AffineSpace as X ((.+^), (.-^), (.-.))
 import Data.VectorSpace as X ((^*), (*^), (^/), (^+^), (^-^))
@@ -21,20 +24,17 @@ import Data.VectorSpace as X ((^*), (*^), (^/), (^+^), (^-^))
 import CTE.Struct as CTE
 
 
-class Linear f where (^/^) :: Fractional ν => f ν -> f ν -> ν
-
-instance Linear Identity where
-   Identity x ^/^ Identity y = x / y
-
 #ifndef MIN_VERSION_linear
 -- mimic linear (except P not hidden)
 newtype Point f a = P (f a)
-   deriving newtype (Eq, Ord)
+   deriving stock (Eq, Ord)
+
+newtype V1 a = V1 a
+   deriving stock (Eq, Ord, Read, Show, Functor, Foldable, Traversable)
+   deriving Applicative via Identity
 #endif
 
-
---  Torsor stuff.
-
+#ifdef MIN_VERSION_torsor
 --  Orphan instance; should be in Torsor.
 instance Additive Rational where
    zero = 0; plus = (+); minus = (-); invert = negate
@@ -43,10 +43,16 @@ instance Additive (f a) => Torsor (Point f a) (f a) where
    add w (P v) = P (w `plus` v)
    difference (P v) (P w) = (v `minus` w)
 
+instance (Num α, Additive α) => Scaling (GenDuration α) α where
+   scale s (GenDuration a) = GenDuration (s * a)
+#endif
 
---  Vector space stuff (very orphany).
+class Linear f where (^/^) :: Fractional ν => f ν -> f ν -> ν
 
-instance Num α => AdditiveGroup (Identity α) where
+instance Linear V1 where
+   V1 x ^/^ V1 y = x / y
+
+instance Num α => AdditiveGroup (V1 α) where
    zeroV = pure 0
    (^+^) = liftA2 (+)
    negateV = liftA negate
@@ -56,22 +62,22 @@ instance AdditiveGroup (φ β) => AffineSpace (Point φ β) where
    P x .+^ y = P $ x ^+^ y
    P x .-. P y = x ^-^ y
 
-instance Num β => VectorSpace (Identity β) where
-   type Scalar (Identity β) = β
-   x *^ Identity y = Identity (x * y)
+instance Num β => VectorSpace (V1 β) where
+   type Scalar (V1 β) = β
+   x *^ V1 y = V1 (x * y)
 
 
 --  A duration is an arbitrary precision rational counting CTE years.
 newtype GenDuration α = GenDuration { toYears :: α }
-   deriving (Functor, Linear, Applicative) via Identity
-   deriving (AdditiveGroup, VectorSpace) via Identity α
-   deriving newtype (Eq, Ord, Additive)
+   deriving (Functor, Linear, Applicative) via V1
+   deriving (AdditiveGroup, VectorSpace) via V1 α
+   deriving newtype (Eq, Ord)
+#ifdef MIN_VERSION_torsor
+   deriving newtype (Additive)
+#endif
 #ifdef MIN_VERSION_linear
    deriving Linear.Additive via Identity
 #endif
-
-instance (Num α, Additive α) => Scaling (GenDuration α) α where
-   scale s (GenDuration a) = GenDuration (s * a)
 
 type Duration = GenDuration Rational
 pattern Duration :: Rational -> Duration

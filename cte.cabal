@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 12c4bcdbaa81fb53de1b59e4b9c3c42c13fa3ab7187b79ff7ee874b536ab4f13
+-- hash: 7d5443d6f0b74ae54053de4c7e1fdcee03b09df95477061d6fd1dcdefbc615f6
 
 name:           cte
-version:        0.5.1
+version:        0.6.0
 synopsis:       Utility functions for working with CTE — Common Equiform Time.
 category:       Time
 homepage:       https://galen.xyz/cte/
@@ -17,7 +17,12 @@ license-file:   LICENSE
 build-type:     Simple
 
 flag linear
-  description: Depend on linear package, to make its instances available.
+  description: Depend on linear package, to make its instances available; also adds orphan instances.  Since exports conflict with vector-space, none of the operators will be re-exported.
+  manual: True
+  default: False
+
+flag torsor
+  description: Include torsor dependency and instances (one orphan instance needed).
   manual: True
   default: False
 
@@ -91,11 +96,13 @@ library
     , extended-reals
     , optparse-applicative
     , time
-    , torsor
     , vector-space
   if flag(linear)
     build-depends:
         linear
+  if flag(torsor)
+    build-depends:
+        torsor
   default-language: Haskell2010
 
 executable gdate
@@ -168,9 +175,11 @@ executable gdate
     , extended-reals
     , optparse-applicative
     , time
-    , torsor
     , vector-space
   if flag(linear)
     build-depends:
         linear
+  if flag(torsor)
+    build-depends:
+        torsor
   default-language: Haskell2010
