@@ -1,12 +1,12 @@
 name: cte
-version: 0.6.0
+version: 0.6.1
 synopsis: Utility functions for working with CTE — Common Equiform Time.
 category: Time
 homepage: https://galen.xyz/cte/
 maintainer: Galen Huntington
 license: MIT
 
-defaults: galenhuntington/hpack-defaults@3f7a96145b925acc35dc16acf7775da9f6a54e25
+defaults: galenhuntington/hpack-defaults@27874600a9673795a129b2f7523451793a39aaf4
 
 source-dirs:
 - .

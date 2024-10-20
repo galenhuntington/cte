@@ -1,13 +1,13 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7d5443d6f0b74ae54053de4c7e1fdcee03b09df95477061d6fd1dcdefbc615f6
+-- hash: 88f077f937150e0c0913660a1ee115f86b06e747682f66d6bf9edd625cafdb45
 
 name:           cte
-version:        0.6.0
+version:        0.6.1
 synopsis:       Utility functions for working with CTE — Common Equiform Time.
 category:       Time
 homepage:       https://galen.xyz/cte/
@@ -87,23 +87,22 @@ library
       OverloadedStrings
   ghc-options: -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-missing-signatures -Wno-unused-do-bind -Wno-orphans -Wcompat -Wmissing-deriving-strategies -pgmF hpre -F
   build-tool-depends:
-      hpre:hpre ==1.*
+      hpre:hpre
   build-depends:
       base
     , base-prelude
     , clock
-    , containers
     , extended-reals
     , optparse-applicative
     , time
     , vector-space
+  default-language: Haskell2010
   if flag(linear)
     build-depends:
         linear
   if flag(torsor)
     build-depends:
         torsor
-  default-language: Haskell2010
 
 executable gdate
   main-is: gdate.hs
@@ -166,20 +165,19 @@ executable gdate
       OverloadedStrings
   ghc-options: -Wall -Wredundant-constraints -Wno-name-shadowing -Wno-missing-signatures -Wno-unused-do-bind -Wno-orphans -Wcompat -Wmissing-deriving-strategies -pgmF hpre -F
   build-tool-depends:
-      hpre:hpre ==1.*
+      hpre:hpre
   build-depends:
       base
     , base-prelude
     , clock
-    , containers
     , extended-reals
     , optparse-applicative
     , time
     , vector-space
+  default-language: Haskell2010
   if flag(linear)
     build-depends:
         linear
   if flag(torsor)
     build-depends:
         torsor
-  default-language: Haskell2010
